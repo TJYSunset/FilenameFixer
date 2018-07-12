@@ -1,0 +1,114 @@
+﻿<Window x:Class="FilenameFixer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FilenameFixer"
+        mc:Ignorable="d"
+        Name="Window"
+        Title="FilenameFixer" Height="600" Width="400" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="120" />
+            <RowDefinition Height="36" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="24" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="MAY HAVE BUGS.&#10;BACKUP FILES BEFORE USING THIS PROGRAM."
+                   Margin="0 16 0 0" TextAlignment="Center" FontWeight="Bold" />
+
+        <Grid Grid.Row="1" Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
+                    <Setter Property="TextAlignment" Value="Right" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="0 6 12 6" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type TextBox}}" TargetType="TextBox">
+                    <Setter Property="TextAlignment" Value="Left" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="0 6 0 6" />
+                </Style>
+            </Grid.Resources>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Target Path" />
+            <TextBox Grid.Row="0" Grid.Column="1" Name="TargetPathTextBox"
+                     Text="{Binding ElementName=Window, Path=TargetPath, Mode=TwoWay}"
+                     IsEnabled="{Binding ElementName=Window, Path=IsIdle}" AllowDrop="True"
+                     PreviewDragEnter="TargetPathTextBox_OnPreviewDrag"
+                     PreviewDragOver="TargetPathTextBox_OnPreviewDrag"
+                     PreviewDrop="TargetPathTextBox_OnPreviewDrop" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Actual Code Page #" />
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="72" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding ElementName=Window, Path=ActualCodePage, Mode=TwoWay}"
+                         IsEnabled="{Binding ElementName=Window, Path=IsIdle}"
+                         GotFocus="RefreshGui" LostFocus="RefreshGui" TextInput="RefreshGui" TextChanged="RefreshGui"
+                         KeyDown="RefreshGui" KeyUp="RefreshGui" />
+                <TextBlock Grid.Column="1" Text="{Binding ElementName=Window, Path=ActualCodePageName}"
+                           Margin="8 0 0 0" />
+            </Grid>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Read As Code Page #" />
+            <Grid Grid.Row="2" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="72" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding ElementName=Window, Path=ReadAsCodePage, Mode=TwoWay}"
+                         IsEnabled="{Binding ElementName=Window, Path=IsIdle}"
+                   
+                         GotFocus="RefreshGui" LostFocus="RefreshGui" TextInput="RefreshGui" TextChanged="RefreshGui"
+                         KeyDown="RefreshGui" KeyUp="RefreshGui" />
+                <TextBlock Grid.Column="1" Text="{Binding ElementName=Window, Path=ReadAsCodePageName}"
+                           Margin="8 0 0 0" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                    <Setter Property="Margin" Value="8 0 8 8" />
+                </Style>
+            </Grid.Resources>
+
+            <Button Grid.Column="0" Content="Load file list" Click="LoadFileList"
+                    IsEnabled="{Binding ElementName=Window, Path=IsIdle}" />
+            <Button Grid.Column="1" Content="Fix!" Click="Fix" IsEnabled="{Binding ElementName=Window, Path=IsReady}" />
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <ScrollViewer Padding="8">
+                <TextBlock Text="{Binding ElementName=Window, Path=Preview}" VerticalAlignment="Top"
+                           TextWrapping="Wrap" />
+            </ScrollViewer>
+        </Grid>
+
+        <StatusBar Grid.Row="4">
+            <TextBlock Text="{Binding ElementName=Window, Path=StatusBarMessage}"
+                       HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4" />
+        </StatusBar>
+    </Grid>
+</Window>
